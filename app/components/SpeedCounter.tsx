@@ -10,6 +10,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import ResultListComponent from "./ResultList";
 
 export default function SpeedCalculator() {
   const [distance, setDistance] = useState("28");
@@ -17,6 +18,7 @@ export default function SpeedCalculator() {
   const [speed, setSpeed] = useState<number | null>(null);
   const [isHolding, setIsHolding] = useState(false);
   const [liveMs, setLiveMs] = useState(0);
+  const [results, setResults] = useState<string[]>([]);
 
   const startTimeRef = useRef<number | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -67,7 +69,9 @@ export default function SpeedCalculator() {
     setElapsedMs(elapsed);
 
     if (dist > 0 && elapsed > 0) {
-      setSpeed(dist / (elapsed / 1000));
+      const mps = dist / (elapsed / 1000);
+      setSpeed(mps);
+      setResults((prev) => [(mps * 3.6).toFixed(2), ...prev]);
     }
 
     Animated.spring(scaleAnim, {
@@ -196,6 +200,8 @@ export default function SpeedCalculator() {
             <Text style={styles.resetText}>Nowy pomiar</Text>
           </Pressable>
         )}
+
+        {speed !== null && <ResultListComponent results={results} />}
       </ScrollView>
     </KeyboardAvoidingView>
   );
