@@ -19,6 +19,8 @@ export default function SpeedCalculator() {
   const [isHolding, setIsHolding] = useState(false);
   const [liveMs, setLiveMs] = useState(0);
   const [results, setResults] = useState<string[]>([]);
+  const pressInTimeRef = useRef<number | null>(null);
+  const startDelayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const startTimeRef = useRef<number | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -30,41 +32,67 @@ export default function SpeedCalculator() {
     const dist = parseFloat(distance);
     if (!dist || dist <= 0) return;
 
-    setIsHolding(true);
-    setSpeed(null);
-    setElapsedMs(null);
-    setLiveMs(0);
-    startTimeRef.current = Date.now();
+    pressInTimeRef.current = Date.now();
 
-    intervalRef.current = setInterval(() => {
-      setLiveMs(Date.now() - (startTimeRef.current ?? Date.now()));
-    }, 50);
+    startDelayRef.current = setTimeout(() => {
+      setIsHolding(true);
+      setLiveMs(0);
+      startTimeRef.current = Date.now();
 
-    Animated.spring(scaleAnim, {
-      toValue: 0.96,
-      useNativeDriver: true,
-      speed: 40,
-      bounciness: 2,
-    }).start();
+      intervalRef.current = setInterval(() => {
+        setLiveMs(Date.now() - (startTimeRef.current ?? Date.now()));
+      }, 50);
 
-    Animated.timing(bgAnim, {
-      toValue: 1,
-      duration: 150,
-      useNativeDriver: false,
-    }).start();
+      Animated.spring(scaleAnim, {
+        toValue: 0.96,
+        useNativeDriver: true,
+        speed: 40,
+        bounciness: 2,
+      }).start();
+      Animated.timing(bgAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: false,
+      }).start();
+    }, 150);
   }, [distance, scaleAnim, bgAnim]);
 
   const stopTimer = useCallback(() => {
+    if (startDelayRef.current) {
+      clearTimeout(startDelayRef.current);
+      startDelayRef.current = null;
+    }
+
     if (!isHolding) return;
 
     const elapsed = Date.now() - (startTimeRef.current ?? Date.now());
-    const dist = parseFloat(distance);
 
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
 
+    // touch delay
+    if (elapsed < 300) {
+      setIsHolding(false);
+      setLiveMs(0);
+      startTimeRef.current = null;
+
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        useNativeDriver: true,
+        speed: 20,
+        bounciness: 6,
+      }).start();
+      Animated.timing(bgAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: false,
+      }).start();
+      return;
+    }
+
+    const dist = parseFloat(distance);
     setIsHolding(false);
     setElapsedMs(elapsed);
 
@@ -80,7 +108,6 @@ export default function SpeedCalculator() {
       speed: 20,
       bounciness: 6,
     }).start();
-
     Animated.timing(bgAnim, {
       toValue: 0,
       duration: 200,
@@ -155,7 +182,9 @@ export default function SpeedCalculator() {
         {/* Wynik */}
 
         {speed !== null && elapsedMs !== null && (
-          <View style={styles.resultCard}>
+          <View
+            style={isHolding ? styles.resultCardNotActive : styles.resultCard}
+          >
             <Row label="Odległość" value={`${parseFloat(distance)} м`} />
             <Row label="Czas" value={formatTime(elapsedMs)} />
             <View style={styles.divider} />
@@ -293,13 +322,12 @@ const styles = StyleSheet.create({
   buttonOuter: {
     borderRadius: 16,
     overflow: "hidden",
-    // marginTop: "60%",
   },
   buttonDisabled: {
     opacity: 0.4,
   },
   button: {
-    paddingVertical: 22,
+    paddingVertical: 50,
     alignItems: "center",
     gap: 2,
   },
@@ -320,6 +348,15 @@ const styles = StyleSheet.create({
     marginTop: -8,
   },
   resultCard: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: "#e5e7eb",
+    padding: 16,
+    gap: 10,
+  },
+  resultCardNotActive: {
+    opacity: 0.5,
     backgroundColor: "#fff",
     borderRadius: 12,
     borderWidth: 1.5,
