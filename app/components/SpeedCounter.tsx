@@ -129,7 +129,7 @@ export default function SpeedCalculator() {
   const formatTime = (ms: number) => {
     const s = Math.floor(ms / 1000);
     const centis = Math.floor((ms % 1000) / 10);
-    return `${s}.${String(centis).padStart(2, "0")} с`;
+    return `${s}.${String(centis).padStart(2, "0")} s`;
   };
 
   const buttonBg = bgAnim.interpolate({
@@ -172,27 +172,27 @@ export default function SpeedCalculator() {
               ? formatTime(liveMs)
               : elapsedMs !== null
                 ? formatTime(elapsedMs)
-                : "0.00 с"}
+                : "0.00 s"}
           </Text>
           <Text style={styles.timerLabel}>
             {isHolding ? "liczę..." : elapsedMs !== null ? "czas" : "gotowy"}
           </Text>
         </View>
 
-        {/* Wynik */}
+        {/* Current result */}
 
         {speed !== null && elapsedMs !== null && (
           <View
             style={isHolding ? styles.resultCardNotActive : styles.resultCard}
           >
-            <Row label="Odległość" value={`${parseFloat(distance)} м`} />
-            <Row label="Czas" value={formatTime(elapsedMs)} />
-            <View style={styles.divider} />
             <Row
               label="km/h"
               value={(speed * 3.6).toFixed(2)}
               color={speed * 3.6 >= 30 ? "#16a34a" : "#dc2626"}
             />
+            <View style={styles.divider} />
+            <Row label="Odległość" value={`${parseFloat(distance)} м`} />
+            <Row label="Czas" value={formatTime(elapsedMs)} />
           </View>
         )}
 
@@ -251,7 +251,7 @@ function Row({
       <Text
         style={[
           styles.rowValue,
-          color ? { color, fontSize: 36, fontWeight: "800" } : null,
+          color ? { color, fontSize: 80, fontWeight: "800" } : null,
         ]}
       >
         {value}
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 24,
-    paddingTop: 64,
+    paddingTop: 36,
     paddingBottom: 48,
     gap: 20,
   },

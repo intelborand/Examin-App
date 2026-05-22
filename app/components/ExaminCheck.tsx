@@ -10,10 +10,10 @@ const LIQUIDS_CHECK_LIST: CheckTask[] = [
   { id: 1, value: "poziom oleju w silniku" },
   { id: 2, value: "poziom płynu chłodzącego" },
   { id: 3, value: "poziom płynu hamulcowego" },
+  { id: 4, value: "działanie sygnału dźwiękowego" },
 ];
 
 const LIGHTS_CHECK_LIST: CheckTask[] = [
-  { id: 4, value: "działanie sygnału dźwiękowego" },
   { id: 5, value: "działanie świateł pozycyjnych" },
   { id: 6, value: "działanie świateł mijania" },
   { id: 7, value: "działanie świateł drogowych" },
