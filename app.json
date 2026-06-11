@@ -2,7 +2,7 @@
   "expo": {
     "name": "examin-app",
     "slug": "examin-app",
-    "version": "4.1.1",
+    "version": "4.1.2",
     "orientation": "portrait",
     "icon": "./assets/images/autocheck-icon.png",
     "scheme": "examinapp",
@@ -30,7 +30,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/autocheck-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
