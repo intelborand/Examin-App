@@ -17,7 +17,7 @@ export default function App() {
       {/* Header */}
       {mode === "" && (
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>ExaminCheck</Text>
+          <Text style={styles.headerTitle}>Examin Check</Text>
           <Text style={styles.headerSub}>panel instruktora</Text>
         </View>
       )}
