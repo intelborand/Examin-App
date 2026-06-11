@@ -15,10 +15,12 @@ export default function App() {
   return (
     <SafeAreaView style={styles.root}>
       {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>ExaminCheck</Text>
-        <Text style={styles.headerSub}>panel instruktora</Text>
-      </View>
+      {mode === "" && (
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>ExaminCheck</Text>
+          <Text style={styles.headerSub}>panel instruktora</Text>
+        </View>
+      )}
 
       {/* Mode tabs */}
       {mode === "" && (
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 16,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#e9eaec",
