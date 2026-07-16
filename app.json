@@ -2,7 +2,7 @@
   "expo": {
     "name": "Instruktor Examin",
     "slug": "examin-app",
-    "version": "4.1.4",
+    "version": "4.1.5",
     "orientation": "portrait",
     "icon": "./assets/images/autocheck-icon.png",
     "scheme": "examinapp",

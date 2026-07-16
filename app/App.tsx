@@ -1,8 +1,11 @@
+import { StatusBar } from "expo-status-bar";
 import { useRef, useState } from "react";
 import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ExaminCheckComponent from "./components/ExaminCheck";
 import SpeedCalculator from "./components/SpeedCounter";
+
+const STATUS_BAR_GREY = "#4B5563";
 
 const MODES = [
   { key: "Examin", label: "Egzamin", icon: "📋" },
@@ -11,53 +14,58 @@ const MODES = [
 
 export default function App() {
   const [mode, setMode] = useState("");
+  const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={styles.root}>
-      {/* Header */}
-      {mode === "" && (
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Examin Check</Text>
-          <Text style={styles.headerSub}>panel instruktora</Text>
-        </View>
-      )}
-
-      {/* Mode tabs */}
-      {mode === "" && (
-        <View style={styles.menuContainer}>
-          <Text style={styles.menuLabel}>Wybierz tryb</Text>
-          <View style={styles.cards}>
-            {MODES.map((m) => (
-              <ModeCard
-                key={m.key}
-                icon={m.icon}
-                label={m.label}
-                onPress={() => setMode(m.key)}
-              />
-            ))}
+    <View style={styles.root}>
+      <StatusBar style="light" backgroundColor={STATUS_BAR_GREY} />
+      <View style={{ height: insets.top, backgroundColor: STATUS_BAR_GREY }} />
+      <View style={[styles.contentWrapper, { paddingBottom: insets.bottom }]}>
+        {/* Header */}
+        {mode === "" && (
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Examin Check</Text>
+            <Text style={styles.headerSub}>panel instruktora</Text>
           </View>
-        </View>
-      )}
+        )}
 
-      {/* Back button when mode selected */}
-      {mode !== "" && (
-        <View style={styles.topBar}>
-          <Pressable style={styles.backBtn} onPress={() => setMode("")}>
-            <Text style={styles.backBtnText}>← Wróć</Text>
-          </Pressable>
-          <Text style={styles.topBarTitle}>
-            {MODES.find((m) => m.key === mode)?.icon}{" "}
-            {MODES.find((m) => m.key === mode)?.label}
-          </Text>
-        </View>
-      )}
+        {/* Mode tabs */}
+        {mode === "" && (
+          <View style={styles.menuContainer}>
+            <Text style={styles.menuLabel}>Wybierz tryb</Text>
+            <View style={styles.cards}>
+              {MODES.map((m) => (
+                <ModeCard
+                  key={m.key}
+                  icon={m.icon}
+                  label={m.label}
+                  onPress={() => setMode(m.key)}
+                />
+              ))}
+            </View>
+          </View>
+        )}
 
-      {/* Content */}
-      <View style={styles.content}>
-        {mode === "Prędkość" && <SpeedCalculator />}
-        {mode === "Examin" && <ExaminCheckComponent />}
+        {/* Back button when mode selected */}
+        {mode !== "" && (
+          <View style={styles.topBar}>
+            <Pressable style={styles.backBtn} onPress={() => setMode("")}>
+              <Text style={styles.backBtnText}>← Wróć</Text>
+            </Pressable>
+            <Text style={styles.topBarTitle}>
+              {MODES.find((m) => m.key === mode)?.icon}{" "}
+              {MODES.find((m) => m.key === mode)?.label}
+            </Text>
+          </View>
+        )}
+
+        {/* Content */}
+        <View style={styles.content}>
+          {mode === "Prędkość" && <SpeedCalculator />}
+          {mode === "Examin" && <ExaminCheckComponent />}
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -107,6 +115,10 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     width: "100%",
+    backgroundColor: "#fff",
+  },
+  contentWrapper: {
+    flex: 1,
   },
   header: {
     paddingHorizontal: 24,

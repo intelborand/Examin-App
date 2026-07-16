@@ -1,14 +1,14 @@
 import React, { useCallback, useRef, useState } from "react";
 import {
-  Animated,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
+    Animated,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 import ResultListComponent from "./ResultList";
 
@@ -73,7 +73,7 @@ export default function SpeedCalculator() {
     }
 
     // touch delay
-    if (elapsed < 300) {
+    if (elapsed < 150) {
       setIsHolding(false);
       setLiveMs(0);
       startTimeRef.current = null;
